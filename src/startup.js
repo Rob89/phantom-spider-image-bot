@@ -39,11 +39,13 @@ PSIM.start({
 	},
 	urlSettings: {
 		queryStringExclusions: ["page", "author", "pagesize", "ipaddress", "nacs", "tag", "postingtype"],
-		rateLimits: [ 	{ segment: '/services/', limit: 10}, 
+		rateLimits: [ 	{ segment: '/services/', limit: 50}, 
 						{ segment: '/tags/', limit: 10 },
 						{ segment: '/info/', limit: 20 },
-						{ segment: '/emails/edit/', limit: 10 }],
-		additionalChecks: [ UrlStore.rules.ignoreNumericLastSection ]
+						{ segment: '/emails/edit/', limit: 10 },
+						{ segment: '/opinions/', limit: 50 },
+						{ segment: '/edit/', limit: 50 }],
+		additionalChecks: [ ] //UrlStore.rules.ignoreNumericLastSection ]
 	},
 	// onError: onError, don't care about errors.
 	perPageCallback: perPageCallback,
