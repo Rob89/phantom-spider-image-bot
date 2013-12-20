@@ -19,6 +19,7 @@ var UrlStore = function (config) {
 	
 	initialize = function () {
 		that.options = utils.extend(defaults, config);
+		limitCounters.urlsServed = 0;
 		var i,
 			rateLimits = that.options.rateLimits,
 			l = rateLimits.length;
@@ -69,7 +70,6 @@ var UrlStore = function (config) {
 		url = cleanUrl(url);
 		l = additionalChecks.length;
 		l2 = limiters.length;
-		
 		matching = visitedUrls.filter(function (elem) {
 			for (i = 0; i < l; i++) {
 				if (additionalChecks[i](url, elem)) { return true; }
@@ -91,7 +91,7 @@ var UrlStore = function (config) {
 	// Adds urls to the current instance. 
 	// e.g. addUrls("www.google.co.uk", "www.abc.com", ["www.patientopinion.org.uk", "www.a.com"]);
 	this.addUrls = function () {
-		var i, j, l2,
+		var i, j, l2, url,
 			urls = Array.prototype.slice.apply(arguments),
 			l = urls.length;
 		if (l === 0) { return that; }
@@ -100,7 +100,10 @@ var UrlStore = function (config) {
 				l2 = urls[i].length;
 				for (j = 0; j < l2; j++) { that.addUrls(urls[i][j]); }				
 			}
-			urlsToVisit.push(cleanUrl(urls[i]));
+			url = cleanUrl(urls[i]);
+			if (shouldVisitUrl(url)) {
+				urlsToVisit.push(url);
+			}
 		}
 		removeDuplicateUrls();
 		return that; // support chaining?
@@ -115,12 +118,15 @@ var UrlStore = function (config) {
 			limits = that.options.rateLimits, 
 			l = limits.length;
 		removeDuplicateUrls();
+		if (limitCounters.urlsServed++ % 10 === 0) {
+				console.log(urlsToVisit.length + " urls left to visit.");
+			};
 		while (!url && urlsToVisit.length > 0) {
 			url = urlsToVisit.shift();
 			if (!shouldVisitUrl(url)) { url = ''; }
 		}
 		if (url) { 
-            visitedUrls.push(url); 
+            visitedUrls.push(url);
         } else {
             return '';
         }
@@ -130,6 +136,14 @@ var UrlStore = function (config) {
 			}
 		}
 		return url;
+	};
+	
+	this.markAsFailed = function (url) {
+		var index = visitedUrls.indexOf(url);
+		if (index > -1) {
+			visitedUrls.splice(index, 1);
+		}
+		that.addIgnoredUrl(url);
 	};
 	
 	this.getUrlsToVisit = function () {
@@ -143,9 +157,6 @@ var UrlStore = function (config) {
 // and this is numeric. e.g. http://www.google.com/123 and http://www.google.com/1234 are treated as equal by this rule.
 var ignoreNumericLastSection = function (elem, url) {
     var baseUrl, baseElem, idx1, idx2;
-    if (elem === url) {
-        return true;
-    }
     idx1 = url.lastIndexOf('/');
     idx2 = elem.lastIndexOf('/');
     baseUrl = url.slice(0, idx1 == -1 ? url.length : idx1);
@@ -156,30 +167,9 @@ var ignoreNumericLastSection = function (elem, url) {
     }
 };
 
-var ignoreNumericLastSectionWithThreshold = function (threshold) {
-	var cache = {};
-	return function (elem, url) {
-		var baseUrl, baseElem, idx1, idx2;
-		if (elem === url) {
-			return true;
-		}
-		idx1 = url.lastIndexOf('/');
-		idx2 = elem.lastIndexOf('/');
-		baseUrl = url.slice(0, idx1 == -1 ? url.length : idx1);
-		baseElem = elem.slice(0, idx2 == -1 ? elem.length : idx2);
-		if (baseUrl === baseElem) {
-			cache[baseUrl] = cache.hasOwnProperty(baseUrl) ? cache[baseUrl] + 1 : 0;
-			return !isNaN(url.slice(idx1+1)) &&
-				!isNaN(elem.slice(idx2+1)) &&
-				cache[baseUrl] < threshold; 
-		}
-	};
-};
-
 exports.create = function (config) {
 	return new UrlStore(config);
 };
 exports.rules = {
-	"ignoreNumericLastSection": ignoreNumericLastSection,
-	"ignoreNumericLastSectionWithThreshold": ignoreNumericLastSectionWithThreshold
+	"ignoreNumericLastSection": ignoreNumericLastSection
 };
