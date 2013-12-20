@@ -37,7 +37,8 @@ var UrlStore = function (config) {
 	};
 	
     removeExcludedQS = function (url) {
-        var i, regex, getFirstChar, 
+        var i, regex, getFirstChar,
+			multipleAmpersandsRegex	= /&&+/g,
 			exclusions = that.options.queryStringExclusions,
 			l = exclusions.length;
         if (url.indexOf('?') === -1 || l === 0) { return url; }
@@ -45,7 +46,7 @@ var UrlStore = function (config) {
 		for (i = 0; i < l; i++) {
 			regex = new RegExp('[?&]' + exclusions[i] + '=([^&]*)&??', 'g');
             url = url.replace(regex, getFirstChar);
-            url = removeLastCharIfEndsWith(url, '&');
+            url = url.replace(multipleAmpersandsRegex, '');
 		}
         url = removeLastCharIfEndsWith(url, '?');
         return removeLastCharIfEndsWith(url, '/');

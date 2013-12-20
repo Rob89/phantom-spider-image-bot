@@ -46,7 +46,8 @@ PSIM.start({
 						{ segment: '/opinions/', limit: 100 },
 						{ segment: '/treatmentfunctions/edit/', limit: 20 },
 						{ segment: '/subscriptions/', limit: 50 },						
-						{ segment: '/users/', limit: 10 }						
+						{ segment: '/users/', limit: 10 },
+						{ segment: '/moderationpopup/', limit: 2 },
 					],
 		additionalChecks: [ ] //UrlStore.rules.ignoreNumericLastSection ]
 	},
