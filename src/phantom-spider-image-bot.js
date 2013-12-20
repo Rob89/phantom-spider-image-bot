@@ -78,9 +78,6 @@ var PhantomSpider = function (config) {
 							return s.indexOf('We couldn\'t find the page you were looking for') !== -1;
 						}
 					});
-					if (failed) {
-						urlStore.markAsFailed(url);
-					}
 					internalLinks = resources.slice(0, resources.indexOf("{{BREAK}}"));
 					imgs = resources.slice(resources.indexOf("{{BREAK}}")+1);						
 					l = imgs.length;
@@ -92,8 +89,15 @@ var PhantomSpider = function (config) {
 						temp = siteRoot(url) + internalLinks[i];
 						urlStore.addUrls(temp);
 					}
+					if (failed) {
+						urlStore.markAsFailed(url);
+						return nextUrl('404', url);
+					}
 					return nextUrl(status, url);
 				}, 200);
+			} else {
+				urlStore.markAsFailed(url);
+				return nextUrl(status, url);
 			}
 		});
 	};
