@@ -45,7 +45,8 @@ PSIM.start({
 						{ segment: '/emails/edit/', limit: 20 },
 						{ segment: '/opinions/', limit: 25 },
 						{ segment: '/treatmentfunctions/edit/', limit: 20 },
-						{ segment: '/subscriptions/', limit: 50 }						
+						{ segment: '/subscriptions/', limit: 50 },						
+						{ segment: '/users/', limit: 10 }						
 					],
 		additionalChecks: [ ] //UrlStore.rules.ignoreNumericLastSection ]
 	},
@@ -57,5 +58,6 @@ PSIM.start({
 		'www.supersecreta.org.au/subscriptions?PartOfName=a', 
 		'www.supersecreta.org.au/reports/member-listing', 
 		'www.supersecreta.org.au/reports/opinion-summary?tag=ankle'],
-	ignoreUrls: ['www.supersecreta.org.au/account/logout']
+	ignoreUrls: ['www.supersecreta.org.au/account/logout',
+				'www.supersecreta/account/testemailfor']
 });

@@ -111,6 +111,7 @@ var UrlStore = function (config) {
 	};
 	
 	this.addIgnoredUrl = function (url) {
+		url = cleanUrl(url);
 		ignoredUrls.push(url);
 	};
 	
