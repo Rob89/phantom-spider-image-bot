@@ -39,12 +39,14 @@ PSIM.start({
 	},
 	urlSettings: {
 		queryStringExclusions: ["page", "author", "pagesize", "ipaddress"],
-		rateLimits: [ {segment: '/services/', limit: 10}],
+		rateLimits: [ 	{ segment: '/services/', limit: 10}, 
+						{ segment: '/tags/', limit: 10 },
+						{ segment: '/emails/edit/', limit: 10 }],
 		additionalChecks: [ UrlStore.rules.ignoreNumericLastSection ]
 	},
 	// onError: onError, don't care about errors.
 	perPageCallback: perPageCallback,
 	finishedCallback: finishedCallback,
-	startingUrls: 'www.patientopiniontest.org.au/moderation',
-	ignoreUrls: ['www.patientopiniontest.org.au/account/logout']
+	startingUrls: [],
+	ignoreUrls: []
 });
