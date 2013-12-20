@@ -96,13 +96,14 @@ var UrlStore = function (config) {
 			l = urls.length;
 		if (l === 0) { return that; }
 		for (i = 0; i < l; i++) {
-			if (Object.prototype.toString.apply(urls[i]) === '[object] [Array]') {
+			if (Object.prototype.toString.apply(urls[i]) == '[object Array]') {
 				l2 = urls[i].length;
 				for (j = 0; j < l2; j++) { that.addUrls(urls[i][j]); }				
-			}
-			url = cleanUrl(urls[i]);
-			if (shouldVisitUrl(url)) {
-				urlsToVisit.push(url);
+			} else {
+				url = cleanUrl(urls[i]);
+				if (shouldVisitUrl(url)) {
+					urlsToVisit.push(url);
+				}
 			}
 		}
 		removeDuplicateUrls();
