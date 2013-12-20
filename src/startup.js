@@ -14,7 +14,7 @@ function perPageCallback (status, url) {
 }
 function finishedCallback (images) {
 	try {
-		stream = fs.open('./results_PO.txt', 'w');
+		stream = fs.open('./results.txt', 'w');
 		stream.writeLine('Images used: ');
 		for (var p in images) {
 			if (images.hasOwnProperty(p)) {
@@ -31,25 +31,31 @@ function finishedCallback (images) {
 PSIM.start({
 	loginRequired: true,
 	loginSettings: {
-		username: "",
-		password: "",
-		url: "",
+		username: "test123",
+		password: "test123",
+		url: "http://www.supersecreta.org.au/account/login",
 		usernameParam: "NameOrEmail",
 		passwordParam: "Password",
 	},
 	urlSettings: {
-		queryStringExclusions: ["page", "author", "pagesize", "ipaddress", "nacs", "tag", "postingtype"],
-		rateLimits: [ 	{ segment: '/services/', limit: 50}, 
-						{ segment: '/tags/', limit: 10 },
-						{ segment: '/info/', limit: 20 },
-						{ segment: '/emails/edit/', limit: 10 },
-						{ segment: '/opinions/', limit: 50 },
-						{ segment: '/edit/', limit: 50 }],
+		queryStringExclusions: ["page", "author", "pagesize", "ipaddress", "nacs", "tag", "postingtype", "subscriptionid"],
+		rateLimits: [ 	{ segment: '/services/', limit: 30}, 
+						{ segment: '/tags/', limit: 30 },
+						{ segment: '/info/', limit: 50 },
+						{ segment: '/emails/edit/', limit: 20 },
+						{ segment: '/opinions/', limit: 25 },
+						{ segment: '/treatmentfunctions/edit/', limit: 20 },
+						{ segment: '/subscriptions/', limit: 50 }						
+					],
 		additionalChecks: [ ] //UrlStore.rules.ignoreNumericLastSection ]
 	},
 	// onError: onError, don't care about errors.
 	perPageCallback: perPageCallback,
 	finishedCallback: finishedCallback,
-	startingUrls: [],
-	ignoreUrls: []
+	startingUrls: [
+		'www.supersecreta.org.au/moderation', 
+		'www.supersecreta.org.au/subscriptions?PartOfName=a', 
+		'www.supersecreta.org.au/reports/member-listing', 
+		'www.supersecreta.org.au/reports/opinion-summary?tag=ankle'],
+	ignoreUrls: ['www.supersecreta.org.au/account/logout']
 });
