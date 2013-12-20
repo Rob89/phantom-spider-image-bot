@@ -38,12 +38,12 @@ PSIM.start({
 		passwordParam: "Password",
 	},
 	urlSettings: {
-		queryStringExclusions: ["page", "author", "pagesize", "ipaddress", "nacs", "tag", "postingtype", "subscriptionid", "username"],
-		rateLimits: [ 	{ segment: '/services/', limit: 30}, 
+		queryStringExclusions: ["page", "author", "pagesize", "ipaddress", "nacs", "tag", "postingtype", "subscriptionid", "username", "scopeforsubscription"],
+		rateLimits: [ 	{ segment: '/services/', limit: 50}, 
 						{ segment: '/tags/', limit: 30 },
 						{ segment: '/info/', limit: 50 },
 						{ segment: '/emails/edit/', limit: 20 },
-						{ segment: '/opinions/', limit: 25 },
+						{ segment: '/opinions/', limit: 100 },
 						{ segment: '/treatmentfunctions/edit/', limit: 20 },
 						{ segment: '/subscriptions/', limit: 50 },						
 						{ segment: '/users/', limit: 10 }						

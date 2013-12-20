@@ -43,7 +43,7 @@ var UrlStore = function (config) {
         if (url.indexOf('?') === -1 || l === 0) { return url; }
         getFirstChar = function (a) { return a.charAt(0); };
 		for (i = 0; i < l; i++) {
-			regex = new RegExp('[?&]' + exclusions[i] + '=([^&]*)&?');
+			regex = new RegExp('[?&]' + exclusions[i] + '=([^&]*)&??', 'g');
             url = url.replace(regex, getFirstChar);
             url = removeLastCharIfEndsWith(url, '&');
 		}
