@@ -38,9 +38,10 @@ PSIM.start({
 		passwordParam: "Password",
 	},
 	urlSettings: {
-		queryStringExclusions: ["page", "author", "pagesize", "ipaddress"],
+		queryStringExclusions: ["page", "author", "pagesize", "ipaddress", "nacs", "tag", "postingtype"],
 		rateLimits: [ 	{ segment: '/services/', limit: 10}, 
 						{ segment: '/tags/', limit: 10 },
+						{ segment: '/info/', limit: 20 },
 						{ segment: '/emails/edit/', limit: 10 }],
 		additionalChecks: [ UrlStore.rules.ignoreNumericLastSection ]
 	},
